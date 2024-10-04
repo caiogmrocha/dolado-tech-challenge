@@ -1,0 +1,26 @@
+version: "3.0"
+
+services:
+  dolado-api:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfiles/Dockerfile.api
+    container_name: dolado-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - dolado-mysql
+
+  dolado-mysql:
+    image: mysql:8
+    container_name: dolado-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/volumes/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
