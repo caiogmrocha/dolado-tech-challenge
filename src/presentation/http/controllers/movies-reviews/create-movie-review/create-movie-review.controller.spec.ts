@@ -3,6 +3,7 @@ import { MoviesReviewsRepository } from "@/app/interfaces/repositories/movies-re
 import { CreateMovieReviewService } from "@/app/services/movies-reviews/create-movie-review/create-movie-review.service";
 import { Test, TestingModule } from "@nestjs/testing";
 import { CreateMovieReviewController } from "./create-movie-review.controller";
+import { faker } from "@faker-js/faker/.";
 
 describe('[Unit] CreateMovieReviewController', () => {
   let controller: CreateMovieReviewController;
@@ -39,6 +40,29 @@ describe('[Unit] CreateMovieReviewController', () => {
     controller = module.get<CreateMovieReviewController>(CreateMovieReviewController);
   });
 
-  it.todo('should return 201 when movie review is created');
-  it.todo('should return 409 when movie review title already exists');
+  it('should create a new movie review', async () => {
+    // Arrange
+    const params = {
+      title: 'The Matrix',
+      notes: 'This is a great movie!',
+    };
+
+    const reviewId = 1;
+
+    moviesReviewsRepository.getByTitle.mockResolvedValue(null);
+    moviesReviewsRepository.create.mockResolvedValue({ id: reviewId });
+    movieInfoProvider.getMovieInfo.mockResolvedValue({
+      title: faker.commerce.productName(),
+      rating: faker.number.float({ min: 0, max: 10 }),
+      releasedAt: faker.date.recent(),
+    });
+
+    // Act
+    const response = await controller.handle(params);
+
+    // Assert
+    expect(response).toEqual({ reviewId: reviewId });
+  });
+
+  it.todo('should throws ConflictException when movie review title already exists');
 });
