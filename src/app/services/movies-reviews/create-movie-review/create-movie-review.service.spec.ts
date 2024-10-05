@@ -79,4 +79,6 @@ describe('[Unit] CreateMovieReviewService', () => {
     // Assert
     await expect(promise).rejects.toThrow(MovieReviewTitleAlreadyExistsException);
   });
+
+  it.todo('should throw MovieInfoNotFoundException when movie info is not found');
 });
