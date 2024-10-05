@@ -1,5 +1,6 @@
-import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { Inject } from "@nestjs/common";
+
+import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 
 export type GetPaginatedMovieReviewsServiceParams = {
   limit: number;
