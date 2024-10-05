@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
-import { Repository } from "typeorm";
+import { FindManyOptions, Like, Repository } from "typeorm";
 
-import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
+import { MovieReviewsRepository, MovieReviewsRepositoryGetPaginatedParams } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { MovieReview } from "@/domain/entities/movie-review.entity";
 
 @Injectable()
@@ -12,8 +12,25 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
     @InjectRepository(MovieReview) private readonly movieReviewRepository: Repository<MovieReview>,
   ) {}
 
-  public async getPaginated(): Promise<MovieReview[]> {
-    return this.movieReviewRepository.find();
+  public async getPaginated(params: MovieReviewsRepositoryGetPaginatedParams): Promise<MovieReview[]> {
+    const options: FindManyOptions<MovieReview> = {};
+
+    if (params.orderBy) {
+      options.order = { [params.orderBy]: params.order };
+    }
+
+    if (params.filterByTitle) {
+      options.where = { movie: { title: Like(`%${params.filterByTitle}%`) } };
+    }
+
+    if (params.filterByAuthor) {
+      options.where = { movie: { authors: { name: Like(`%${params.filterByAuthor}%`) } } };
+    }
+
+    options.take = params.limit;
+    options.skip = params.offset;
+
+    return this.movieReviewRepository.find(options);
   }
 
   public async getByTitle(title: string): Promise<MovieReview> {

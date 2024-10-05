@@ -1,6 +1,15 @@
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { Inject } from "@nestjs/common";
 
+export type GetPaginatedMovieReviewsServiceParams = {
+  limit: number;
+  offset: number;
+  filterByTitle?: string;
+  filterByAuthor?: string;
+  orderBy?: 'rating' | 'releasedAt';
+  order?: 'asc' | 'desc';
+}
+
 export type GetPaginatedMovieReviewsServiceResponse = {
   title: string;
   rating: number;
@@ -13,8 +22,8 @@ export class GetPaginatedMovieReviewsService {
     @Inject(MovieReviewsRepository) private readonly movieReviewsRepository: MovieReviewsRepository
   ) {}
 
-  public async execute(): Promise<GetPaginatedMovieReviewsServiceResponse[]> {
-    const movieReviews = await this.movieReviewsRepository.getPaginated();
+  public async execute(params: GetPaginatedMovieReviewsServiceParams): Promise<GetPaginatedMovieReviewsServiceResponse[]> {
+    const movieReviews = await this.movieReviewsRepository.getPaginated(params);
 
     return movieReviews.map(movieReview => ({
       title: movieReview.movie.title,
