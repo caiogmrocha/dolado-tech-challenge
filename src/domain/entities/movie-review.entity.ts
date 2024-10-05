@@ -8,7 +8,7 @@ export class MovieReview {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 500 })
+  @Column({ length: 255 })
   title: string;
 
   @Column()
