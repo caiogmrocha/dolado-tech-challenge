@@ -26,6 +26,13 @@ export class CreateMovieReviewService {
       throw new MovieReviewTitleAlreadyExistsException(movieReview.id);
     }
 
-    return;
+    movieReview = new MovieReview({
+      title: params.title,
+      notes: params.notes,
+    });
+
+    const { id } = await this.moviesReviewsRepository.create(movieReview);
+
+    return { reviewId: id };
   }
 }
