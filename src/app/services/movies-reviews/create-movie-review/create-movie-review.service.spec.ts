@@ -4,12 +4,14 @@ import { faker } from "@faker-js/faker";
 
 import { CreateMovieReviewService } from "./create-movie-review.service";
 import { MoviesReviewsRepository } from "@/app/interfaces/repositories/movies-reviews.repository";
+import { MovieInfoProvider } from "@/app/interfaces/api/movie-info.provider";
 import { MovieReview } from "@/domain/entities/movie-review.entity";
 import { MovieReviewTitleAlreadyExistsException } from "../errors/movie-review-title-already-exists.exception";
 
 describe('[Unit] CreateMovieReviewService', () => {
   let service: CreateMovieReviewService;
   let moviesReviewsRepository: jest.Mocked<MoviesReviewsRepository>;
+  let movieInfoProvider: jest.Mocked<MovieInfoProvider>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,12 +23,19 @@ describe('[Unit] CreateMovieReviewService', () => {
             create: jest.fn(),
           })),
         },
+        {
+          provide: MovieInfoProvider,
+          useClass: jest.fn().mockImplementation(() => ({
+            getMovieInfo: jest.fn(),
+          })),
+        },
         CreateMovieReviewService,
       ],
     }).compile();
 
     service = module.get<CreateMovieReviewService>(CreateMovieReviewService);
     moviesReviewsRepository = module.get<jest.Mocked<MoviesReviewsRepository>>(MoviesReviewsRepository);
+    movieInfoProvider = module.get<jest.Mocked<MovieInfoProvider>>(MovieInfoProvider);
   });
 
   it('should create a new movie review', async () => {
@@ -40,6 +49,11 @@ describe('[Unit] CreateMovieReviewService', () => {
 
     moviesReviewsRepository.getByTitle.mockResolvedValue(null);
     moviesReviewsRepository.create.mockResolvedValue({ id: reviewId });
+    movieInfoProvider.getMovieInfo.mockResolvedValue({
+      title: params.title,
+      rating: faker.number.float({ min: 0, max: 10 }),
+      releasedAt: faker.date.recent(),
+    });
 
     // Act
     const promise = service.execute(params);
@@ -47,6 +61,7 @@ describe('[Unit] CreateMovieReviewService', () => {
     // Assert
     await expect(promise).resolves.toEqual({ reviewId });
     expect(moviesReviewsRepository.create).toHaveBeenCalled();
+    expect(movieInfoProvider.getMovieInfo).toHaveBeenCalledWith(params.title);
   });
 
   it('should throw MovieReviewTitleAlreadyExistsException when title already exists', async () => {
