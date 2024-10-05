@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 
 import { MovieReviewTitleAlreadyExistsException } from "../errors/movie-review-title-already-exists.exception";
-import { MoviesReviewsRepository } from "@/app/interfaces/repositories/movies-reviews.repository";
+import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { MovieInfoProvider } from "@/app/interfaces/api/movie-info.provider";
 import { MovieReview } from "@/domain/entities/movie-review.entity";
 
@@ -17,12 +17,12 @@ type CreateMovieReviewServiceResponse = {
 @Injectable()
 export class CreateMovieReviewService {
   constructor (
-    @Inject(MoviesReviewsRepository) private readonly moviesReviewsRepository: MoviesReviewsRepository,
+    @Inject(MovieReviewsRepository) private readonly movieReviewsRepository: MovieReviewsRepository,
     @Inject(MovieInfoProvider) private readonly movieInfoProvider: MovieInfoProvider,
   ) {}
 
   public async execute(params: CreateMovieReviewServiceParams): Promise<CreateMovieReviewServiceResponse> {
-    let movieReview = await this.moviesReviewsRepository.getByTitle(params.title);
+    let movieReview = await this.movieReviewsRepository.getByTitle(params.title);
 
     if (movieReview) {
       throw new MovieReviewTitleAlreadyExistsException(movieReview.id);
@@ -37,7 +37,7 @@ export class CreateMovieReviewService {
       notes: params.notes,
     });
 
-    const { id } = await this.moviesReviewsRepository.create(movieReview);
+    const { id } = await this.movieReviewsRepository.create(movieReview);
 
     return { reviewId: id };
   }

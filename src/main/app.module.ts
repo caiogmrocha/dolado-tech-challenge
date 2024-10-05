@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MovieReviewsModule } from './movie-reviews.module';
 
 @Module({
   imports: [
@@ -14,10 +15,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.DB_DEFAULT,
       ssl: false,
       entities: [
-        [__dirname, '..', '..', '..', 'domain', 'entities', '*.entity.js'].join('/'),
+        __dirname + '/../domain/entities/*.entity.{ts,js}',
       ],
       synchronize: true,
     }),
+    MovieReviewsModule,
   ],
   controllers: [],
   providers: [],

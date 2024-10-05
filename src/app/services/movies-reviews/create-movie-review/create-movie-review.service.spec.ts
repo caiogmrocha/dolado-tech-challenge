@@ -3,21 +3,21 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { faker } from "@faker-js/faker";
 
 import { CreateMovieReviewService } from "./create-movie-review.service";
-import { MoviesReviewsRepository } from "@/app/interfaces/repositories/movies-reviews.repository";
+import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { MovieInfoProvider } from "@/app/interfaces/api/movie-info.provider";
 import { MovieReview } from "@/domain/entities/movie-review.entity";
 import { MovieReviewTitleAlreadyExistsException } from "../errors/movie-review-title-already-exists.exception";
 
 describe('[Unit] CreateMovieReviewService', () => {
   let service: CreateMovieReviewService;
-  let moviesReviewsRepository: jest.Mocked<MoviesReviewsRepository>;
+  let moviesReviewsRepository: jest.Mocked<MovieReviewsRepository>;
   let movieInfoProvider: jest.Mocked<MovieInfoProvider>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
-          provide: MoviesReviewsRepository,
+          provide: MovieReviewsRepository,
           useClass: jest.fn().mockImplementation(() => ({
             getByTitle: jest.fn(),
             create: jest.fn(),
@@ -34,7 +34,7 @@ describe('[Unit] CreateMovieReviewService', () => {
     }).compile();
 
     service = module.get<CreateMovieReviewService>(CreateMovieReviewService);
-    moviesReviewsRepository = module.get<jest.Mocked<MoviesReviewsRepository>>(MoviesReviewsRepository);
+    moviesReviewsRepository = module.get<jest.Mocked<MovieReviewsRepository>>(MovieReviewsRepository);
     movieInfoProvider = module.get<jest.Mocked<MovieInfoProvider>>(MovieInfoProvider);
   });
 

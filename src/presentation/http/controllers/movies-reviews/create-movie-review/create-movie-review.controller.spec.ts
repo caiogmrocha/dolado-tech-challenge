@@ -5,21 +5,21 @@ import { faker } from "@faker-js/faker";
 
 import { CreateMovieReviewController } from "./create-movie-review.controller";
 import { CreateMovieReviewService } from "@/app/services/movies-reviews/create-movie-review/create-movie-review.service";
-import { MoviesReviewsRepository } from "@/app/interfaces/repositories/movies-reviews.repository";
+import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { MovieInfoProvider } from "@/app/interfaces/api/movie-info.provider";
 import { MovieReview } from "@/domain/entities/movie-review.entity";
 
 describe('[Unit] CreateMovieReviewController', () => {
   let controller: CreateMovieReviewController;
   let service: CreateMovieReviewService;
-  let moviesReviewsRepository: jest.Mocked<MoviesReviewsRepository>;
+  let moviesReviewsRepository: jest.Mocked<MovieReviewsRepository>;
   let movieInfoProvider: jest.Mocked<MovieInfoProvider>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
-          provide: MoviesReviewsRepository,
+          provide: MovieReviewsRepository,
           useClass: jest.fn().mockImplementation(() => ({
             getByTitle: jest.fn(),
             create: jest.fn(),
@@ -39,7 +39,7 @@ describe('[Unit] CreateMovieReviewController', () => {
     }).compile();
 
     service = module.get<CreateMovieReviewService>(CreateMovieReviewService);
-    moviesReviewsRepository = module.get<jest.Mocked<MoviesReviewsRepository>>(MoviesReviewsRepository);
+    moviesReviewsRepository = module.get<jest.Mocked<MovieReviewsRepository>>(MovieReviewsRepository);
     movieInfoProvider = module.get<jest.Mocked<MovieInfoProvider>>(MovieInfoProvider);
     controller = module.get<CreateMovieReviewController>(CreateMovieReviewController);
   });
