@@ -1,4 +1,4 @@
-type MovieInfo = {
+export type MovieInfo = {
   title: string;
   releasedAt: Date;
   rating: number;
