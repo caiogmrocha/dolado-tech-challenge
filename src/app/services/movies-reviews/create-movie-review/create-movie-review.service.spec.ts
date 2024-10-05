@@ -29,7 +29,25 @@ describe('[Unit] CreateMovieReviewService', () => {
     moviesReviewsRepository = module.get<jest.Mocked<MoviesReviewsRepository>>(MoviesReviewsRepository);
   });
 
-  it.todo('should create a new movie review');
+  it('should create a new movie review', async () => {
+    // Arrange
+    const params = {
+      title: faker.commerce.productName(),
+      notes: faker.lorem.paragraph(),
+    };
+
+    const reviewId = faker.number.int();
+
+    moviesReviewsRepository.getByTitle.mockResolvedValue(null);
+    moviesReviewsRepository.create.mockResolvedValue({ id: reviewId });
+
+    // Act
+    const promise = service.execute(params);
+
+    // Assert
+    await expect(promise).resolves.toEqual({ reviewId });
+    expect(moviesReviewsRepository.create).toHaveBeenCalled();
+  });
 
   it('should throw MovieReviewTitleAlreadyExistsException when title already exists', async () => {
     // Arrange
