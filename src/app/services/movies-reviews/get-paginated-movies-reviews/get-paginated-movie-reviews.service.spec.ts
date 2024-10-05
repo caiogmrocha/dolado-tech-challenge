@@ -1,9 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { faker } from "@faker-js/faker";
+
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { GetPaginatedMovieReviewsService } from "./get-paginated-movie-reviews.service";
-import { faker } from "@faker-js/faker/.";
 import { MovieReview } from "@/domain/entities/movie-review.entity";
+import { Movie } from "@/domain/entities/movie.entity";
+import { Author } from "@/domain/entities/author.entity";
 
 describe('[Unit] GetPaginatedMovieReviewsService', () => {
   let service: GetPaginatedMovieReviewsService;
@@ -15,7 +18,7 @@ describe('[Unit] GetPaginatedMovieReviewsService', () => {
         {
           provide: MovieReviewsRepository,
           useClass: jest.fn().mockImplementation(() => ({
-            getAll: jest.fn(),
+            getPaginated: jest.fn(),
             getByTitle: jest.fn(),
             create: jest.fn(),
           })),
@@ -32,24 +35,32 @@ describe('[Unit] GetPaginatedMovieReviewsService', () => {
     // Arrange
     const movieReviews = [
       new MovieReview({
-        title: faker.commerce.productName(),
-        rating: faker.number.float({ min: 0, max: 10 }),
-        releasedAt: faker.date.recent(),
+        id: faker.number.int(),
         notes: faker.lorem.paragraph(),
+        movie: new Movie({
+          id: faker.number.int(),
+          title: faker.commerce.productName(),
+          rating: faker.number.float({ min: 0, max: 10 }),
+          releasedAt: faker.date.recent(),
+          authors: [
+            new Author({ name: faker.person.fullName() }),
+          ]
+        }),
       }),
     ];
 
-    moviesReviewsRepository.getAll.mockResolvedValue(movieReviews);
+    moviesReviewsRepository.getPaginated.mockResolvedValue(movieReviews);
 
     // Act
     const promise = service.execute();
 
     // Assert
     await expect(promise).resolves.toEqual(movieReviews.map(movieReview => ({
-      title: movieReview.title,
-      rating: movieReview.rating,
-      releasedAt: movieReview.releasedAt,
+      title: movieReview.movie.title,
+      rating: movieReview.movie.rating,
+      releasedAt: movieReview.movie.releasedAt,
       notes: movieReview.notes,
     })));
+    expect(moviesReviewsRepository.getPaginated).toHaveBeenCalledTimes(1);
   });
 });

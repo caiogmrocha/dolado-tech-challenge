@@ -12,8 +12,12 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
     @InjectRepository(MovieReview) private readonly movieReviewRepository: Repository<MovieReview>,
   ) {}
 
-  public async getByTitle(title: string): Promise<MovieReview | null> {
-    return this.movieReviewRepository.findOneBy({ title });
+  public async getPaginated(): Promise<MovieReview[]> {
+    return this.movieReviewRepository.find();
+  }
+
+  public async getByTitle(title: string): Promise<MovieReview> {
+    return this.movieReviewRepository.findOneBy({ movie: { title } });
   }
 
   public async create(movieReview: MovieReview): Promise<{ id: number }> {

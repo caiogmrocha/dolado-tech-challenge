@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Movie } from "./movie.entity";
 
 @Entity("movie_reviews")
 export class MovieReview {
@@ -9,15 +10,9 @@ export class MovieReview {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
-  title: string;
-
-  @Column({ type: 'decimal', precision: 2, scale: 1 })
-  rating: number;
-
-  @Column({ type: 'date' })
-  releasedAt: Date;
-
   @Column('text')
   notes: string;
+
+  @ManyToOne(() => Movie, movie => movie.reviews)
+  movie: Movie;
 }

@@ -14,12 +14,12 @@ export class GetPaginatedMovieReviewsService {
   ) {}
 
   public async execute(): Promise<GetPaginatedMovieReviewsServiceResponse[]> {
-    const movieReviews = await this.movieReviewsRepository.getAll();
+    const movieReviews = await this.movieReviewsRepository.getPaginated();
 
     return movieReviews.map(movieReview => ({
-      title: movieReview.title,
-      rating: movieReview.rating,
-      releasedAt: movieReview.releasedAt,
+      title: movieReview.movie.title,
+      rating: movieReview.movie.rating,
+      releasedAt: movieReview.movie.releasedAt,
       notes: movieReview.notes,
     }));
   }

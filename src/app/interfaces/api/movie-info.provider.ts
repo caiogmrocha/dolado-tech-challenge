@@ -2,6 +2,7 @@ export type MovieInfo = {
   title: string;
   releasedAt: Date;
   rating: number;
+  authors: string[];
 }
 
 export interface MovieInfoProvider {

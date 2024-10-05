@@ -27,6 +27,7 @@ export class CreateMovieReviewController {
         };
 
         default: {
+          console.error(error);
           throw new InternalServerErrorException();
         };
       }

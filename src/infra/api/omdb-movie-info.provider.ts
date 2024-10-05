@@ -23,6 +23,7 @@ export class OmdbMovieInfoProvider implements MovieInfoProvider {
       title: response.data.Title,
       releasedAt: new Date(response.data.Released),
       rating: parseFloat(response.data.imdbRating),
+      authors: response.data.Writer.split(',').map((author: string) => author.trim()),
     };
   }
 }
