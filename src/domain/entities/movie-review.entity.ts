@@ -1,5 +1,6 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity("movie_reviews")
 export class MovieReview {
   constructor(partial: Partial<MovieReview>) {
     Object.assign(this, partial);
@@ -11,10 +12,10 @@ export class MovieReview {
   @Column({ length: 255 })
   title: string;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 2, scale: 1 })
   rating: number;
 
-  @Column()
+  @Column({ type: 'date' })
   releasedAt: Date;
 
   @Column('text')
