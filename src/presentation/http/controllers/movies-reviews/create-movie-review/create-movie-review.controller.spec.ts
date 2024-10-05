@@ -34,7 +34,7 @@ describe('[Unit] CreateMovieReviewController', () => {
         {
           provide: AuthorsRepository,
           useClass: jest.fn().mockImplementation(() => ({
-            createMany: jest.fn(),
+            create: jest.fn(),
           })),
         },
         {
@@ -84,6 +84,8 @@ describe('[Unit] CreateMovieReviewController', () => {
     moviesRepository.getByTitle.mockResolvedValue(null);
 
     moviesRepository.create.mockResolvedValue({ id: faker.number.int() });
+
+    authorsRepository.create.mockResolvedValue(faker.number.int());
 
     moviesReviewsRepository.getByTitle.mockResolvedValue(null);
 

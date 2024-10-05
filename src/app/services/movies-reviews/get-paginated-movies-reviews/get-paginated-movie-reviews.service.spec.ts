@@ -31,7 +31,7 @@ describe('[Unit] GetPaginatedMovieReviewsService', () => {
     moviesReviewsRepository = module.get<jest.Mocked<MovieReviewsRepository>>(MovieReviewsRepository);
   });
 
-  it('should return all movie reviews', async () => {
+  it('should return movie reviews list', async () => {
     // Arrange
     const movieReviews = [
       new MovieReview({
@@ -52,7 +52,14 @@ describe('[Unit] GetPaginatedMovieReviewsService', () => {
     moviesReviewsRepository.getPaginated.mockResolvedValue(movieReviews);
 
     // Act
-    const promise = service.execute();
+    const promise = service.execute({
+      limit: faker.number.int({ min: 1, max: 10 }),
+      offset: faker.number.int({ min: 0, max: 10 }),
+      filterByTitle: faker.lorem.word(),
+      filterByAuthor: faker.lorem.word(),
+      orderBy: faker.helpers.arrayElement(['rating', 'releasedAt']),
+      order: faker.helpers.arrayElement(['asc', 'desc']),
+    });
 
     // Assert
     await expect(promise).resolves.toEqual(movieReviews.map(movieReview => ({
@@ -61,6 +68,13 @@ describe('[Unit] GetPaginatedMovieReviewsService', () => {
       releasedAt: movieReview.movie.releasedAt,
       notes: movieReview.notes,
     })));
-    expect(moviesReviewsRepository.getPaginated).toHaveBeenCalledTimes(1);
+    expect(moviesReviewsRepository.getPaginated).toHaveBeenCalledWith(expect.objectContaining({
+      limit: expect.any(Number),
+      offset: expect.any(Number),
+      filterByTitle: expect.any(String),
+      filterByAuthor: expect.any(String),
+      orderBy: expect.any(String),
+      order: expect.any(String),
+    }));
   });
 });

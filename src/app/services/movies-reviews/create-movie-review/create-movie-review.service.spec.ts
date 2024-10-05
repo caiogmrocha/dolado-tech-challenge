@@ -32,7 +32,7 @@ describe('[Unit] CreateMovieReviewService', () => {
         {
           provide: AuthorsRepository,
           useClass: jest.fn().mockImplementation(() => ({
-            createMany: jest.fn(),
+            create: jest.fn(),
           })),
         },
         {
@@ -77,6 +77,8 @@ describe('[Unit] CreateMovieReviewService', () => {
 
     moviesRepository.create.mockResolvedValue({ id: faker.number.int() });
 
+    authorsRepository.create.mockResolvedValue(faker.number.int());
+
     moviesReviewsRepository.getByTitle.mockResolvedValue(null);
 
     const reviewId = 1;
@@ -119,6 +121,8 @@ describe('[Unit] CreateMovieReviewService', () => {
     movie.reviews[0].movie = movie;
 
     moviesRepository.getByTitle.mockResolvedValue(movie);
+
+    authorsRepository.create.mockResolvedValue(faker.number.int());
 
     moviesReviewsRepository.create.mockResolvedValue({ id: faker.number.int() });
 
