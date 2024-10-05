@@ -15,6 +15,8 @@ import { TypeormMoviesRepository } from "@/infra/repositories/typeorm-movies.rep
 import { AuthorsRepository } from "@/app/interfaces/repositories/authors.repository";
 import { TypeormAuthorsRepository } from "@/infra/repositories/typeorm-authors.repository";
 import { Author } from "@/domain/entities/author.entity";
+import { GetPaginatedMovieReviewsController } from "@/presentation/http/controllers/movies-reviews/get-paginated-movie-reviews/get-paginated-movie-reviews.controller";
+import { GetPaginatedMovieReviewsService } from "@/app/services/movies-reviews/get-paginated-movies-reviews/get-paginated-movie-reviews.service";
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { Author } from "@/domain/entities/author.entity";
   ],
   controllers: [
     CreateMovieReviewController,
+    GetPaginatedMovieReviewsController,
   ],
   providers: [
     {
@@ -49,6 +52,7 @@ import { Author } from "@/domain/entities/author.entity";
       useClass: TypeormMovieReviewsRepository,
     },
     CreateMovieReviewService,
+    GetPaginatedMovieReviewsService,
   ],
 })
 export class MovieReviewsModule {}

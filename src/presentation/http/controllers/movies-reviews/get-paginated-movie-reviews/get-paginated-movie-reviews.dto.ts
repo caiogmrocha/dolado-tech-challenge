@@ -1,27 +1,30 @@
-import { IsInt, IsNotEmpty, IsEnum, MaxLength } from "class-validator";
+import { IsInt, IsNotEmpty, IsEnum, MaxLength, IsNumberString, IsPositive, IsOptional, isInt } from "class-validator";
+import { Transform } from "class-transformer";
 
 export class GetPaginatedMovieReviewsControllerDto {
   @IsNotEmpty()
-  @IsInt()
+  @Transform(({ value }) => value ? parseInt(value) : 10)
+  @IsPositive()
   public limit: number;
 
   @IsNotEmpty()
+  @Transform(({ value }) => value ? parseInt(value) : 0)
   @IsInt()
   public offset: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(255)
   public filterByTitle?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(255)
   public filterByAuthor?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(['rating', 'releasedAt'])
   public orderBy?: 'rating' | 'releasedAt';
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(['asc', 'desc'])
   public order?: 'asc' | 'desc';
 }

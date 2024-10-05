@@ -13,7 +13,9 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
   ) {}
 
   public async getPaginated(params: MovieReviewsRepositoryGetPaginatedParams): Promise<MovieReview[]> {
-    const options: FindManyOptions<MovieReview> = {};
+    const options: FindManyOptions<MovieReview> = {
+      relations: ['movie'],
+    };
 
     if (params.orderBy) {
       options.order = { [params.orderBy]: params.order };
