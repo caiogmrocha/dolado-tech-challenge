@@ -11,6 +11,12 @@ export class MovieReview {
   @Column({ length: 500 })
   title: string;
 
+  @Column()
+  rating: number;
+
+  @Column()
+  releasedAt: Date;
+
   @Column('text')
   notes: string;
 }
