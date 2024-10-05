@@ -1,12 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
-import { GetAllMovieReviewsService } from "./get-all-movie-reviews.service";
+import { GetPaginatedMovieReviewsService } from "./get-paginated-movie-reviews.service";
 import { faker } from "@faker-js/faker/.";
 import { MovieReview } from "@/domain/entities/movie-review.entity";
 
-describe('[Unit] GetAllMovieReviewsService', () => {
-  let service: GetAllMovieReviewsService;
+describe('[Unit] GetPaginatedMovieReviewsService', () => {
+  let service: GetPaginatedMovieReviewsService;
   let moviesReviewsRepository: jest.Mocked<MovieReviewsRepository>;
 
   beforeEach(async () => {
@@ -20,11 +20,11 @@ describe('[Unit] GetAllMovieReviewsService', () => {
             create: jest.fn(),
           })),
         },
-        GetAllMovieReviewsService,
+        GetPaginatedMovieReviewsService,
       ],
     }).compile();
 
-    service = module.get<GetAllMovieReviewsService>(GetAllMovieReviewsService);
+    service = module.get<GetPaginatedMovieReviewsService>(GetPaginatedMovieReviewsService);
     moviesReviewsRepository = module.get<jest.Mocked<MovieReviewsRepository>>(MovieReviewsRepository);
   });
 
