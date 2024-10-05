@@ -1,9 +1,13 @@
-import { MovieInfoProvider } from "@/app/interfaces/api/movie-info.provider";
-import { MoviesReviewsRepository } from "@/app/interfaces/repositories/movies-reviews.repository";
-import { CreateMovieReviewService } from "@/app/services/movies-reviews/create-movie-review/create-movie-review.service";
 import { Test, TestingModule } from "@nestjs/testing";
+import { ConflictException } from "@nestjs/common";
+
+import { faker } from "@faker-js/faker";
+
 import { CreateMovieReviewController } from "./create-movie-review.controller";
-import { faker } from "@faker-js/faker/.";
+import { CreateMovieReviewService } from "@/app/services/movies-reviews/create-movie-review/create-movie-review.service";
+import { MoviesReviewsRepository } from "@/app/interfaces/repositories/movies-reviews.repository";
+import { MovieInfoProvider } from "@/app/interfaces/api/movie-info.provider";
+import { MovieReview } from "@/domain/entities/movie-review.entity";
 
 describe('[Unit] CreateMovieReviewController', () => {
   let controller: CreateMovieReviewController;
@@ -64,5 +68,19 @@ describe('[Unit] CreateMovieReviewController', () => {
     expect(response).toEqual({ reviewId: reviewId });
   });
 
-  it.todo('should throws ConflictException when movie review title already exists');
+  it('should throws ConflictException when movie review title already exists', async () => {
+    // Arrange
+    const params = {
+      title: faker.commerce.productName(),
+      notes: faker.lorem.paragraph(),
+    };
+
+    moviesReviewsRepository.getByTitle.mockResolvedValue({ title: params.title } as MovieReview);
+
+    // Act
+    const promise = controller.handle(params);
+
+    // Assert
+    await expect(promise).rejects.toThrow(ConflictException);
+  });
 });
