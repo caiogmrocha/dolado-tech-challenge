@@ -22,6 +22,8 @@ export class UpdateMovieReviewService {
       throw new MovieReviewNotFoundException(params.id);
     }
 
-    return;
+    movieReview.notes = params.notes;
+
+    await this.movieReviewsRepository.update(movieReview);
   }
 }
