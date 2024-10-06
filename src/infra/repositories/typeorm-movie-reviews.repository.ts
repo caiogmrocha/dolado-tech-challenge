@@ -51,4 +51,8 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
 
     return { id };
   }
+
+  public async update(movieReview: MovieReview): Promise<void> {
+    await this.movieReviewRepository.update(movieReview.id, movieReview);
+  }
 }
