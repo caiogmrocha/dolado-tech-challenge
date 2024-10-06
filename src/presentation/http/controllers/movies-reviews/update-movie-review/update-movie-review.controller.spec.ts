@@ -1,7 +1,11 @@
-import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
+import { Test, TestingModule } from "@nestjs/testing";
+import { NotFoundException } from "@nestjs/common";
+
+import { faker } from "@faker-js/faker";
+
 import { UpdateMovieReviewController } from "./update-movie-review.controller";
 import { UpdateMovieReviewService } from "@/app/services/movies-reviews/update-movie-review/update-movie-review.service";
-import { Test, TestingModule } from "@nestjs/testing";
+import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 
 describe('[Unit] UpdateMovieReviewController', () => {
   let controller: UpdateMovieReviewController;
@@ -18,7 +22,7 @@ describe('[Unit] UpdateMovieReviewController', () => {
             update: jest.fn(),
           })),
         },
-        UpdateMovieReviewController,
+        UpdateMovieReviewService,
       ],
       controllers: [UpdateMovieReviewController],
     }).compile();
@@ -29,5 +33,16 @@ describe('[Unit] UpdateMovieReviewController', () => {
   });
 
   it.todo('should update movie review');
-  it.todo('should throw NotFoundException when movie review not found');
+
+  it('should throw NotFoundException when movie review not found', async () => {
+    // Arrange
+    const id = 1;
+    moviesReviewsRepository.getById.mockResolvedValue(null);
+
+    // Act
+    const promise = controller.handle({ id }, { notes: faker.lorem.paragraph() });
+
+    // Assert
+    await expect(promise).rejects.toThrow(NotFoundException);
+  });
 });
