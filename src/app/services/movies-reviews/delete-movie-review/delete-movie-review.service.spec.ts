@@ -3,6 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { DeleteMovieReviewService } from "./delete-movie-review.service";
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { MovieReviewNotFoundException } from "../errors/movie-review-not-found.exception";
+import { MovieReview } from "@/domain/entities/movie-review.entity";
 
 describe('[Unit] DeleteMovieReviewService', () => {
   let service: DeleteMovieReviewService;
@@ -15,7 +16,7 @@ describe('[Unit] DeleteMovieReviewService', () => {
           provide: MovieReviewsRepository,
           useClass: jest.fn().mockImplementation(() => ({
             getById: jest.fn(),
-            update: jest.fn(),
+            delete: jest.fn(),
           })),
         },
         DeleteMovieReviewService,
@@ -26,7 +27,21 @@ describe('[Unit] DeleteMovieReviewService', () => {
     moviesReviewsRepository = module.get<jest.Mocked<MovieReviewsRepository>>(MovieReviewsRepository);
   });
 
-  it.todo('should delete a movie review');
+  it('should delete a movie review', async () => {
+    // Arrange
+    const movieReview = new MovieReview({
+      id: 1,
+      notes: 'Lorem ipsum',
+    });
+
+    moviesReviewsRepository.getById.mockResolvedValue(movieReview);
+
+    // Act
+    await service.execute({ id: movieReview.id });
+
+    // Assert
+    expect(moviesReviewsRepository.delete).toHaveBeenCalledWith(movieReview);
+  });
 
   it('should throw MovieReviewNotFoundException when movie review does not exist', async () => {
     // Arrange
