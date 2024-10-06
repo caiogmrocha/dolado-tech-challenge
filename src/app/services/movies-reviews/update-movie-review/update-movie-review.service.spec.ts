@@ -2,6 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { UpdateMovieReviewService } from "./update-movie-review.service";
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
+import { MovieReviewNotFoundException } from "../errors/movie-review-not-found.exception";
 
 describe('[Unit] UpdateMovieReviewService', () => {
   let service: UpdateMovieReviewService;
@@ -13,8 +14,7 @@ describe('[Unit] UpdateMovieReviewService', () => {
         {
           provide: MovieReviewsRepository,
           useClass: jest.fn().mockImplementation(() => ({
-            getByTitle: jest.fn(),
-            create: jest.fn(),
+            getById: jest.fn(),
           })),
         },
         UpdateMovieReviewService,
@@ -26,5 +26,16 @@ describe('[Unit] UpdateMovieReviewService', () => {
   });
 
   it.todo('should update movie review');
-  it.todo('should throw MovieReviewNotFoundException when movie review not found');
+
+  it('should throw MovieReviewNotFoundException when movie review not found', async () => {
+    // Arrange
+    const id = 1;
+    moviesReviewsRepository.getById.mockResolvedValue(null);
+
+    // Act
+    const promise = service.execute({ id, notes: 'new notes' });
+
+    // Assert
+    await expect(promise).rejects.toThrow(MovieReviewNotFoundException);
+  });
 });
