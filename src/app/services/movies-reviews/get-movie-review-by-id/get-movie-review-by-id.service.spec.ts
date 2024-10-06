@@ -8,7 +8,7 @@ import { MovieReview } from "@/domain/entities/movie-review.entity";
 import { Movie } from "@/domain/entities/movie.entity";
 import { Author } from "@/domain/entities/author.entity";
 
-describe('[Unit] GetPaginatedMovieReviewsService', () => {
+describe('[Unit] GetMovieReviewByIdService', () => {
   let service: GetMovieReviewByIdService;
   let moviesReviewsRepository: jest.Mocked<MovieReviewsRepository>;
 
