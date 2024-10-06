@@ -1,4 +1,4 @@
-import { Controller, Delete, Inject, InternalServerErrorException, NotFoundException, Param } from "@nestjs/common";
+import { Controller, Delete, HttpCode, HttpStatus, Inject, InternalServerErrorException, NotFoundException, Param } from "@nestjs/common";
 
 import { DeleteMovieReviewControllerRequestParamsDto } from "./delete-movie-review.dto";
 import { DeleteMovieReviewService } from "@/app/services/movies-reviews/delete-movie-review/delete-movie-review.service";
@@ -11,6 +11,7 @@ export class DeleteMovieReviewController {
   ) {}
 
   @Delete('/movie-reviews/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   public async handle(@Param() params: DeleteMovieReviewControllerRequestParamsDto): Promise<void> {
     try {
       await this.deleteMovieReviewService.execute({ id: params.id });

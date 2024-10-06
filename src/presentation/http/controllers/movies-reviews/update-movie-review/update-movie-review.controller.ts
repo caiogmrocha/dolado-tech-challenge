@@ -1,4 +1,4 @@
-import { Body, Controller, InternalServerErrorException, NotFoundException, Param, Put } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, InternalServerErrorException, NotFoundException, Param, Put } from "@nestjs/common";
 
 import { UpdateMovieReviewControllerRequestBodyDto, UpdateMovieReviewControllerRequestParamsDto } from "./update-movie-review.dto";
 import { MovieReviewNotFoundException } from "@/app/services/movies-reviews/errors/movie-review-not-found.exception";
@@ -11,6 +11,7 @@ export class UpdateMovieReviewController {
   ) {}
 
   @Put('/movie-reviews/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   public async handle(
     @Param() params: UpdateMovieReviewControllerRequestParamsDto,
     @Body() body: UpdateMovieReviewControllerRequestBodyDto
