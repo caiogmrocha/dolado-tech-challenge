@@ -12,11 +12,16 @@ export type UpdateMovieReviewServiceParams = {
 @Injectable()
 export class UpdateMovieReviewService {
   constructor (
-    @Inject(MoviesRepository) private readonly moviesRepository: MoviesRepository,
     @Inject(MovieReviewsRepository) private readonly movieReviewsRepository: MovieReviewsRepository
   ) {}
 
   public async execute(params: UpdateMovieReviewServiceParams): Promise<void> {
+    const movieReview = await this.movieReviewsRepository.getById(params.id);
+
+    if (!movieReview) {
+      throw new MovieReviewNotFoundException(params.id);
+    }
+
     return;
   }
 }
