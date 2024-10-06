@@ -1,6 +1,9 @@
+import { Test, TestingModule } from "@nestjs/testing";
+import { faker } from "@faker-js/faker";
+
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { GetMovieReviewByIdService } from "./get-movie-review-by-id.service";
-import { Test, TestingModule } from "@nestjs/testing";
+import { MovieReviewNotFoundException } from "../errors/movie-review-not-found.exception";
 
 describe('[Unit] GetPaginatedMovieReviewsService', () => {
   let service: GetMovieReviewByIdService;
@@ -12,9 +15,7 @@ describe('[Unit] GetPaginatedMovieReviewsService', () => {
         {
           provide: MovieReviewsRepository,
           useClass: jest.fn().mockImplementation(() => ({
-            getPaginated: jest.fn(),
-            getByTitle: jest.fn(),
-            create: jest.fn(),
+            getById: jest.fn(),
           })),
         },
         GetMovieReviewByIdService,
@@ -26,5 +27,16 @@ describe('[Unit] GetPaginatedMovieReviewsService', () => {
   });
 
   it.todo('should return movie review by id');
-  it.todo('should throw MovieReviewNotFoundException when movie review not found');
+
+  it('should throw MovieReviewNotFoundException when movie review not found', async () => {
+    // Arrange
+    const id = faker.number.int();
+    moviesReviewsRepository.getById.mockResolvedValue(null);
+
+    // Act
+    const promise = service.execute({ id });
+
+    // Assert
+    await expect(promise).rejects.toThrow(MovieReviewNotFoundException);
+  });
 });
