@@ -82,7 +82,7 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
     await app.close();
   });
 
-  it('GET /movie-reviews?limit=5&offset=0 | should return 200', async () => {
+  it('GET /movie-reviews?limit=5&offset=0 | should return 200 and an array of 5 movie reviews', async () => {
     const movieReviewsToBeInserted = [
       {
         title: 'The Matrix',
@@ -127,10 +127,67 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
       });
   });
 
-  it.todo('GET /movie-reviews?limit=5&offset=5&orderBy=rating&order=DESC | should return 200');
-  it.todo('GET /movie-reviews?limit=5&offset=5&orderBy=rating&order=ASC | should return 200');
-  it.todo('GET /movie-reviews?limit=5&offset=5&orderBy=releasedAt&order=ASC | should return 200');
-  it.todo('GET /movie-reviews?limit=5&offset=5&orderBy=releasedAt&order=DESC | should return 200');
-  it.todo('GET /movie-reviews?limit=5&offset=5&filterByTitle=The+Matrix | should return 200');
-  it.todo('GET /movie-reviews?limit=5&offset=5&filterByAuthor=John+Doe | should return 200');
+  it('GET /movie-reviews?limit=5&offset=5&orderBy=rating&order=desc | should return 200 and ordered by rating', async () => {
+    const movieReviewsToBeInserted = [
+      {
+        title: 'The Matrix',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Reloaded',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Revolutions',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Resurrections',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Avatar',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Dune',
+        notes: faker.lorem.words(10),
+      }
+    ];
+
+    for (const movieReview of movieReviewsToBeInserted) {
+      await request(app.getHttpServer())
+        .post('/movie-reviews')
+        .send(movieReview)
+        .expect(201);
+    }
+
+    const limit = 5;
+
+    await request(app.getHttpServer())
+      .get(`/movie-reviews`)
+      .query({
+        limit,
+        offset: 0,
+        orderBy: 'rating',
+        order: 'desc'
+      })
+      .expect(200)
+      .expect((response) => {
+        expect(response.body).toHaveLength(limit);
+
+        let previousRating = response.body[0].rating;
+
+        for (const movieReview of response.body) {
+          expect(movieReview.rating).toBeLessThanOrEqual(previousRating);
+          previousRating = movieReview.rating;
+        }
+      });
+  });
+
+  it.todo('GET /movie-reviews?limit=5&offset=0&orderBy=rating&order=asc | should return 200');
+  it.todo('GET /movie-reviews?limit=5&offset=0&orderBy=releasedAt&order=asc | should return 200');
+  it.todo('GET /movie-reviews?limit=5&offset=0&orderBy=releasedAt&order=desc | should return 200');
+  it.todo('GET /movie-reviews?limit=5&offset=0&filterByTitle=The+Matrix | should return 200');
+  it.todo('GET /movie-reviews?limit=5&offset=0&filterByAuthor=John+Doe | should return 200');
 });
