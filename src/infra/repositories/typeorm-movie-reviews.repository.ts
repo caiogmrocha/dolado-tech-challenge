@@ -18,7 +18,7 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
     };
 
     if (params.orderBy) {
-      options.order = { [params.orderBy]: params.order };
+      options.order = { movie: { [params.orderBy]: params.order } };
     }
 
     if (params.filterByTitle) {
