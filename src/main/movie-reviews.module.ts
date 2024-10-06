@@ -8,6 +8,8 @@ import { GetPaginatedMovieReviewsController } from "@/presentation/http/controll
 import { GetPaginatedMovieReviewsService } from "@/app/services/movies-reviews/get-paginated-movies-reviews/get-paginated-movie-reviews.service";
 import { GetMovieReviewByIdController } from "@/presentation/http/controllers/movies-reviews/get-movie-review-by-id/get-movie-review-by-id.controller";
 import { GetMovieReviewByIdService } from "@/app/services/movies-reviews/get-movie-review-by-id/get-movie-review-by-id.service";
+import { UpdateMovieReviewService } from "@/app/services/movies-reviews/update-movie-review/update-movie-review.service";
+import { UpdateMovieReviewController } from "@/presentation/http/controllers/movies-reviews/update-movie-review/update-movie-review.controller";
 import { OmdbMovieInfoProvider } from "@/infra/api/omdb-movie-info.provider";
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { MoviesRepository } from "@/app/interfaces/repositories/movies.repository";
@@ -36,6 +38,7 @@ import { Author } from "@/domain/entities/author.entity";
     CreateMovieReviewController,
     GetPaginatedMovieReviewsController,
     GetMovieReviewByIdController,
+    UpdateMovieReviewController,
   ],
   providers: [
     {
@@ -57,6 +60,7 @@ import { Author } from "@/domain/entities/author.entity";
     CreateMovieReviewService,
     GetPaginatedMovieReviewsService,
     GetMovieReviewByIdService,
+    UpdateMovieReviewService,
   ],
 })
 export class MovieReviewsModule {}
