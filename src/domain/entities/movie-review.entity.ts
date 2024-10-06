@@ -13,6 +13,18 @@ export class MovieReview {
   @Column('text')
   notes: string;
 
+  @Column('boolean', { default: false })
+  isDeleted: boolean;
+
+  @Column('date')
+  deletedAt: Date;
+
+  @Column('date', { default: 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column('date', { onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
+  updatedAt: Date;
+
   @ManyToOne(() => Movie, movie => movie.reviews)
   movie: Movie;
 }

@@ -12,4 +12,16 @@ export class Author {
 
   @Column({ length: 255 })
   name: string;
+
+  @Column('boolean', { default: false })
+  isDeleted: boolean;
+
+  @Column('date')
+  deletedAt: Date;
+
+  @Column('date', { default: 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column('date', { onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
+  updatedAt: Date;
 }

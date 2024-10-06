@@ -30,6 +30,18 @@ export class Movie {
   @Column({ type: 'date' })
   releasedAt: Date;
 
+  @Column('boolean', { default: false })
+  isDeleted: boolean;
+
+  @Column('date')
+  deletedAt: Date;
+
+  @Column('date', { default: 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column('date', { onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
+  updatedAt: Date;
+
   @ManyToMany(() => Author)
   @JoinTable({ name: 'movies_authors' })
   authors: Author[];

@@ -18,5 +18,7 @@ export class DeleteMovieReviewService {
     if (!movieReview) {
       throw new MovieReviewNotFoundException(params.id);
     }
+
+    await this.movieReviewsRepository.delete(movieReview);
   }
 }

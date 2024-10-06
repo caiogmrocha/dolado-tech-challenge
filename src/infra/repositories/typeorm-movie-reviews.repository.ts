@@ -55,4 +55,11 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
   public async update(movieReview: MovieReview): Promise<void> {
     await this.movieReviewRepository.update(movieReview.id, movieReview);
   }
+
+  public async delete(movieReview: MovieReview): Promise<void> {
+    movieReview.isDeleted = true;
+    movieReview.deletedAt = new Date();
+
+    await this.movieReviewRepository.update(movieReview.id, movieReview);
+  }
 }
