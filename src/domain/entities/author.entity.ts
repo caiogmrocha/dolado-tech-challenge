@@ -1,5 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Movie } from "./movie.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity("authors")
 export class Author {
@@ -13,15 +12,12 @@ export class Author {
   @Column({ length: 255 })
   name: string;
 
-  @Column('boolean', { default: false })
-  isDeleted: boolean;
-
-  @Column('date')
+  @DeleteDateColumn()
   deletedAt: Date;
 
-  @Column('date', { default: 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column('date', { onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date;
 }

@@ -1,5 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Transform } from "class-transformer";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 import { Author } from "./author.entity";
 import { MovieReview } from "./movie-review.entity";
@@ -30,16 +29,13 @@ export class Movie {
   @Column({ type: 'date' })
   releasedAt: Date;
 
-  @Column('boolean', { default: false })
-  isDeleted: boolean;
-
-  @Column('date')
+  @DeleteDateColumn()
   deletedAt: Date;
 
-  @Column('date', { default: 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column('date', { onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToMany(() => Author)

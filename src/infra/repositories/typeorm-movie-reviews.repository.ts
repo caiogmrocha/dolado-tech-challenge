@@ -57,9 +57,6 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
   }
 
   public async delete(movieReview: MovieReview): Promise<void> {
-    movieReview.isDeleted = true;
-    movieReview.deletedAt = new Date();
-
-    await this.movieReviewRepository.update(movieReview.id, movieReview);
+    await this.movieReviewRepository.softDelete(movieReview.id);
   }
 }

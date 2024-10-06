@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Movie } from "./movie.entity";
 
 @Entity("movie_reviews")
@@ -13,16 +13,13 @@ export class MovieReview {
   @Column('text')
   notes: string;
 
-  @Column('boolean', { default: false })
-  isDeleted: boolean;
-
-  @Column('date')
+  @DeleteDateColumn()
   deletedAt: Date;
 
-  @Column('date', { default: 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column('date', { onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToOne(() => Movie, movie => movie.reviews)
