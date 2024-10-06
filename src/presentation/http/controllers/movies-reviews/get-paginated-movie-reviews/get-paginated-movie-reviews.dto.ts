@@ -1,7 +1,7 @@
 import { IsInt, IsNotEmpty, IsEnum, MaxLength, IsNumberString, IsPositive, IsOptional, isInt } from "class-validator";
 import { Transform } from "class-transformer";
 
-export class GetPaginatedMovieReviewsControllerDto {
+export class GetPaginatedMovieReviewsControllerRequestQueryDto {
   @IsNotEmpty()
   @Transform(({ value }) => value ? parseInt(value) : 10)
   @IsPositive()

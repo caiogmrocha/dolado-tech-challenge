@@ -1,7 +1,7 @@
 import { Controller, Get, Inject, InternalServerErrorException, Query } from "@nestjs/common";
 
 import { GetPaginatedMovieReviewsService } from "@/app/services/movies-reviews/get-paginated-movies-reviews/get-paginated-movie-reviews.service";
-import { GetPaginatedMovieReviewsControllerDto } from "./get-paginated-movie-reviews.dto";
+import { GetPaginatedMovieReviewsControllerRequestQueryDto } from "./get-paginated-movie-reviews.dto";
 
 @Controller()
 export class GetPaginatedMovieReviewsController {
@@ -10,7 +10,7 @@ export class GetPaginatedMovieReviewsController {
   ) {}
 
   @Get('/movie-reviews')
-  public async handle(@Query() query: GetPaginatedMovieReviewsControllerDto) {
+  public async handle(@Query() query: GetPaginatedMovieReviewsControllerRequestQueryDto) {
     try {
       return await this.getPaginatedMovieReviewsService.execute(query);
     } catch (error) {

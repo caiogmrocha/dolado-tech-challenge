@@ -1,6 +1,6 @@
 import { IsNotEmpty, MaxLength } from "class-validator";
 
-export class CreateMovieReviewDto {
+export class CreateMovieReviewControllerRequestBodyDto {
   @IsNotEmpty()
   @MaxLength(255)
   title: string;
