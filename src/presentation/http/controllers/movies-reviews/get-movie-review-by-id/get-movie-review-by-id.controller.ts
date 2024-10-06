@@ -17,7 +17,7 @@ export class GetMovieReviewByIdController {
     private readonly getMovieReviewByIdService: GetMovieReviewByIdService
   ) {}
 
-  @Get('/movies-reviews/:id')
+  @Get('/movie-reviews/:id')
   public async handle(@Param() params: GetMovieReviewByIdControllerRequestDto): Promise<GetMovieReviewByIdControllerResponse> {
     try {
       return await this.getMovieReviewByIdService.execute(params);

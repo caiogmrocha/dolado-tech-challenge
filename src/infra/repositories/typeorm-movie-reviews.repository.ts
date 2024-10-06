@@ -35,6 +35,13 @@ export class TypeormMovieReviewsRepository implements MovieReviewsRepository {
     return this.movieReviewRepository.find(options);
   }
 
+  public async getById(id: number): Promise<MovieReview> {
+    return this.movieReviewRepository.findOne({ where: { id }, relations: [
+      'movie',
+      'movie.authors',
+    ] });
+  }
+
   public async getByTitle(title: string): Promise<MovieReview> {
     return this.movieReviewRepository.findOneBy({ movie: { title } });
   }
