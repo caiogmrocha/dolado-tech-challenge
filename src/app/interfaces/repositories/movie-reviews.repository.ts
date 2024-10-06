@@ -11,6 +11,7 @@ export type MovieReviewsRepositoryGetPaginatedParams = {
 
 export interface MovieReviewsRepository {
   getPaginated(params: MovieReviewsRepositoryGetPaginatedParams): Promise<MovieReview[]>;
+  getById(id: number): Promise<MovieReview | null>;
   getByTitle(title: string): Promise<MovieReview | null>;
   create(movieReview: MovieReview): Promise<{ id: number }>;
 }
