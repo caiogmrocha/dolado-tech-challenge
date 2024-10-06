@@ -15,6 +15,21 @@ export class UpdateMovieReviewController {
     @Param() params: UpdateMovieReviewControllerRequestParamsDto,
     @Body() body: UpdateMovieReviewControllerRequestBodyDto
   ): Promise<void> {
-    return;
+    try {
+      await this.updateMovieReviewService.execute({
+        id: params.id,
+        notes: body.notes,
+      });
+    } catch (error) {
+      switch (error.constructor) {
+        case MovieReviewNotFoundException: {
+          throw new NotFoundException(error.message);
+        }
+
+        default: {
+          throw new InternalServerErrorException(error.message);
+        }
+      }
+    }
   }
 }
