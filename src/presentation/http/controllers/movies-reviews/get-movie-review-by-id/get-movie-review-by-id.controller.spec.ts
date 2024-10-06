@@ -8,6 +8,7 @@ import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-revi
 import { MovieReview } from "@/domain/entities/movie-review.entity";
 import { Movie } from "@/domain/entities/movie.entity";
 import { Author } from "@/domain/entities/author.entity";
+import { NotFoundException } from "@nestjs/common";
 
 describe('[Unit] GetMovieReviewByIdController', () => {
   let controller: GetMovieReviewByIdController;
@@ -62,5 +63,15 @@ describe('[Unit] GetMovieReviewByIdController', () => {
     });
   });
 
-  it.todo('should throw NotFoundException when movie review not found');
+  it('should throw NotFoundException when movie review not found', async () => {
+    // Arrange
+    const id = faker.number.int();
+    moviesReviewsRepository.getById.mockResolvedValue(null);
+
+    // Act
+    const promise = controller.handle({ id });
+
+    // Assert
+    await expect(promise).rejects.toThrow(NotFoundException);
+  });
 });
