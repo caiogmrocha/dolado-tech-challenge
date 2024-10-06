@@ -2,7 +2,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { DeleteMovieReviewService } from "@/app/services/movies-reviews/delete-movie-review/delete-movie-review.service";
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
-import { DeleteMovieReviewController } from "./delete-movie-reviews.controller";
+import { DeleteMovieReviewController } from "./delete-movie-review.controller";
+import { NotFoundException } from "@nestjs/common";
 
 describe('[Unit] DeleteMovieReviewController', () => {
   let controller: DeleteMovieReviewController;
@@ -30,5 +31,16 @@ describe('[Unit] DeleteMovieReviewController', () => {
   });
 
   it.todo('should delete a movie review');
-  it.todo('should throw NotFoundException when movie review does not exist');
+
+  it('should throw NotFoundException when movie review does not exist', async () => {
+    // Arrange
+    const params = { id: 1 };
+    moviesReviewsRepository.getById.mockResolvedValue(null);
+
+    // Act
+    const promise = controller.handle(params);
+
+    // Assert
+    await expect(promise).rejects.toThrow(NotFoundException);
+  });
 });
