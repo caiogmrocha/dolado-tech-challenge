@@ -2,6 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { DeleteMovieReviewService } from "./delete-movie-review.service";
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
+import { MovieReviewNotFoundException } from "../errors/movie-review-not-found.exception";
 
 describe('[Unit] DeleteMovieReviewService', () => {
   let service: DeleteMovieReviewService;
@@ -26,5 +27,16 @@ describe('[Unit] DeleteMovieReviewService', () => {
   });
 
   it.todo('should delete a movie review');
-  it.todo('should throw MovieReviewNotFoundError when movie review does not exist');
+
+  it('should throw MovieReviewNotFoundException when movie review does not exist', async () => {
+    // Arrange
+    const movieReviewId = 1;
+    moviesReviewsRepository.getById.mockResolvedValue(null);
+
+    // Act
+    const promise = service.execute({ id: movieReviewId });
+
+    // Assert
+    await expect(promise).rejects.toThrow(MovieReviewNotFoundException);
+  });
 });
