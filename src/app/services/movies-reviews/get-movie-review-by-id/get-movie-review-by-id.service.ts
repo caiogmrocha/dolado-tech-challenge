@@ -1,5 +1,6 @@
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
 import { Inject, Injectable } from "@nestjs/common";
+import { MovieReviewNotFoundException } from "../errors/movie-review-not-found.exception";
 
 export type GetMovieReviewByIdServiceParams = {
   id: number;
@@ -21,6 +22,10 @@ export class GetMovieReviewByIdService {
 
   public async execute(params: GetMovieReviewByIdServiceParams): Promise<GetMovieReviewByIdServiceResponse> {
     const movieReview = await this.movieReviewsRepository.getById(params.id);
+
+    if (!movieReview) {
+      throw new MovieReviewNotFoundException(params.id);
+    }
 
     return {
       title: movieReview.movie.title,
