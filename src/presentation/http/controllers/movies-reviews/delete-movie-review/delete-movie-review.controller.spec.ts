@@ -1,9 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { NotFoundException } from "@nestjs/common";
 
+import { faker } from "@faker-js/faker";
+
+import { DeleteMovieReviewController } from "./delete-movie-review.controller";
 import { DeleteMovieReviewService } from "@/app/services/movies-reviews/delete-movie-review/delete-movie-review.service";
 import { MovieReviewsRepository } from "@/app/interfaces/repositories/movie-reviews.repository";
-import { DeleteMovieReviewController } from "./delete-movie-review.controller";
-import { NotFoundException } from "@nestjs/common";
+import { MovieReview } from "@/domain/entities/movie-review.entity";
 
 describe('[Unit] DeleteMovieReviewController', () => {
   let controller: DeleteMovieReviewController;
@@ -30,7 +33,20 @@ describe('[Unit] DeleteMovieReviewController', () => {
     moviesReviewsRepository = module.get<jest.Mocked<MovieReviewsRepository>>(MovieReviewsRepository);
   });
 
-  it.todo('should delete a movie review');
+  it('should delete a movie review', async () => {
+    // Arrange
+    const movieReview = new MovieReview({
+      id: 1,
+      notes: faker.lorem.sentence(),
+    });
+    moviesReviewsRepository.getById.mockResolvedValue(movieReview);
+
+    // Act
+    await controller.handle({ id: movieReview.id });
+
+    // Assert
+    expect(moviesReviewsRepository.delete).toHaveBeenCalledWith(movieReview);
+  });
 
   it('should throw NotFoundException when movie review does not exist', async () => {
     // Arrange
