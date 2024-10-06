@@ -15,6 +15,7 @@ export interface MovieReviewsRepository {
   getByTitle(title: string): Promise<MovieReview | null>;
   create(movieReview: MovieReview): Promise<{ id: number }>;
   update(movieReview: MovieReview): Promise<void>;
+  delete(movieReview: MovieReview): Promise<void>;
 }
 
 export const MovieReviewsRepository = Symbol('MovieReviewsRepository');
