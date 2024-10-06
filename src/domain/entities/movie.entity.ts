@@ -1,4 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Transform } from "class-transformer";
+
 import { Author } from "./author.entity";
 import { MovieReview } from "./movie-review.entity";
 
@@ -14,7 +16,15 @@ export class Movie {
   @Column({ length: 255 })
   title: string;
 
-  @Column({ type: 'decimal', precision: 2, scale: 1 })
+  @Column({
+    type: 'decimal',
+    precision: 2,
+    scale: 1,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    }
+  })
   rating: number;
 
   @Column({ type: 'date' })
