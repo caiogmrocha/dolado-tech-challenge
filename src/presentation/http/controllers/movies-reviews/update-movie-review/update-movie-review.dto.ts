@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+
 import { Transform } from "class-transformer";
-import { IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator";
+import { IsNotEmpty, IsPositive, IsString } from "class-validator";
 
 export class UpdateMovieReviewControllerRequestParamsDto {
   @IsNotEmpty()
