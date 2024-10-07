@@ -3,12 +3,12 @@ import { Transform } from "class-transformer";
 
 export class GetPaginatedMovieReviewsControllerRequestQueryDto {
   @IsNotEmpty()
-  @Transform(({ value }) => value ? parseInt(value) : 10)
+  @Transform(({ value }) => parseInt(value))
   @IsPositive()
   public limit: number;
 
   @IsNotEmpty()
-  @Transform(({ value }) => value ? parseInt(value) : 0)
+  @Transform(({ value }) => parseInt(value))
   @IsInt()
   public offset: number;
 
