@@ -363,6 +363,57 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
       });
   });
 
-  it.todo('GET /movie-reviews?limit=5&offset=0&filterByTitle=The+Matrix | should return 200 and filtered by title');
+  it('GET /movie-reviews?limit=5&offset=0&filterByTitle=Dune | should return 200 and filtered by title', async () => {
+    const movieReviewsToBeInserted = [
+      {
+        title: 'The Matrix',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Reloaded',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Revolutions',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Resurrections',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Avatar',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Dune',
+        notes: faker.lorem.words(10),
+      }
+    ];
+
+    for (const movieReview of movieReviewsToBeInserted) {
+      await request(app.getHttpServer())
+        .post('/movie-reviews')
+        .send(movieReview)
+        .expect(201);
+    }
+
+    const limit = 5;
+    const filterByTitle = 'Dune';
+
+    await request(app.getHttpServer())
+      .get(`/movie-reviews`)
+      .query({
+        limit,
+        offset: 0,
+        filterByTitle: filterByTitle
+      })
+      .expect(200)
+      .expect((response) => {
+        expect(response.body).toHaveLength(1);
+        expect(response.body[0].title).toBe(filterByTitle);
+      });
+  });
+
   it.todo('GET /movie-reviews?limit=5&offset=0&filterByAuthor=John+Doe | should return 200 and filtered by author');
 });
