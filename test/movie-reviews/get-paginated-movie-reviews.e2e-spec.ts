@@ -7,10 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
+import { faker } from '@faker-js/faker';
 
 import { MovieReviewsModule } from '@/main/movie-reviews.module';
-import { MovieReviewsRepository } from '@/app/interfaces/repositories/movie-reviews.repository';
-import { faker } from '@faker-js/faker/.';
 
 describe('GetPaginatedMovieReviewsController (e2e)', () => {
   let app: INestApplication;
