@@ -243,7 +243,66 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
       });
   });
 
-  it.todo('GET /movie-reviews?limit=5&offset=0&orderBy=releasedAt&order=asc | should return 200 and ordered by releasedAt in ascending order');
+  it('GET /movie-reviews?limit=5&offset=0&orderBy=releasedAt&order=asc | should return 200 and ordered by releasedAt in ascending order', async () => {
+    const movieReviewsToBeInserted = [
+      {
+        title: 'The Matrix',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Reloaded',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Revolutions',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Resurrections',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Avatar',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Dune',
+        notes: faker.lorem.words(10),
+      }
+    ];
+
+    for (const movieReview of movieReviewsToBeInserted) {
+      await request(app.getHttpServer())
+        .post('/movie-reviews')
+        .send(movieReview)
+        .expect(201);
+    }
+
+    const limit = 5;
+
+    await request(app.getHttpServer())
+      .get(`/movie-reviews`)
+      .query({
+        limit,
+        offset: 0,
+        orderBy: 'releasedAt',
+        order: 'asc'
+      })
+      .expect(200)
+      .expect((response) => {
+        expect(response.body).toHaveLength(limit);
+
+        let previousReleasedAt = new Date(response.body[0].releasedAt);
+
+        for (const movieReview of response.body) {
+          const releasedAt = new Date(movieReview.releasedAt);
+
+          expect(releasedAt.getTime()).toBeGreaterThanOrEqual(previousReleasedAt.getTime());
+          previousReleasedAt = releasedAt;
+        }
+      });
+  });
+
   it.todo('GET /movie-reviews?limit=5&offset=0&orderBy=releasedAt&order=desc | should return 200 and ordered by releasedAt in descending order');
   it.todo('GET /movie-reviews?limit=5&offset=0&filterByTitle=The+Matrix | should return 200 and filtered by title');
   it.todo('GET /movie-reviews?limit=5&offset=0&filterByAuthor=John+Doe | should return 200 and filtered by author');
