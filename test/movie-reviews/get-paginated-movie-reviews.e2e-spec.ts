@@ -415,5 +415,57 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
       });
   });
 
-  it.todo('GET /movie-reviews?limit=5&offset=0&filterByAuthor=John+Doe | should return 200 and filtered by author');
+  it('GET /movie-reviews?limit=5&offset=0&filterByAuthor=Frank+Herbert | should return 200 and filtered by author', async () => {
+    const movieReviewsToBeInserted = [
+      {
+        title: 'The Matrix',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Reloaded',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Revolutions',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'The Matrix Resurrections',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Avatar',
+        notes: faker.lorem.words(10),
+      },
+      {
+        title: 'Dune',
+        notes: faker.lorem.words(10),
+      }
+    ];
+
+    for (const movieReview of movieReviewsToBeInserted) {
+      await request(app.getHttpServer())
+        .post('/movie-reviews')
+        .send(movieReview)
+        .expect(201);
+    }
+
+    const limit = 5;
+
+    // This is the author of the show "Dune"
+    const filterByAuthor = 'Frank Herbert';
+
+    await request(app.getHttpServer())
+      .get(`/movie-reviews`)
+      .query({
+        limit,
+        offset: 0,
+        filterByAuthor: filterByAuthor
+      })
+      .expect(200)
+      .expect((response) => {
+        expect(response.body).toHaveLength(1);
+        expect(response.body[0].title).toBe('Dune');
+      });
+  });
 });
