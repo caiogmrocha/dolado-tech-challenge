@@ -3,6 +3,7 @@ import { Body, Controller, HttpCode, HttpStatus, InternalServerErrorException, N
 import { UpdateMovieReviewControllerRequestBodyDto, UpdateMovieReviewControllerRequestParamsDto } from "./update-movie-review.dto";
 import { MovieReviewNotFoundException } from "@/app/services/movies-reviews/errors/movie-review-not-found.exception";
 import { UpdateMovieReviewService } from "@/app/services/movies-reviews/update-movie-review/update-movie-review.service";
+import { ApiOperation } from "@nestjs/swagger";
 
 @Controller()
 export class UpdateMovieReviewController {
@@ -12,6 +13,10 @@ export class UpdateMovieReviewController {
 
   @Put('/movie-reviews/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Update a movie review',
+    description: 'Update a movie review with the given data',
+  })
   public async handle(
     @Param() params: UpdateMovieReviewControllerRequestParamsDto,
     @Body() body: UpdateMovieReviewControllerRequestBodyDto
