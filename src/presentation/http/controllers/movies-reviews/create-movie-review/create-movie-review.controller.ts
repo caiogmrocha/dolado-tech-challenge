@@ -3,6 +3,7 @@ import { Body, ConflictException, Controller, HttpCode, HttpStatus, InternalServ
 import { CreateMovieReviewControllerRequestBodyDto } from "./create-movie.review.dto";
 import { CreateMovieReviewService } from "@/app/services/movies-reviews/create-movie-review/create-movie-review.service";
 import { MovieReviewTitleAlreadyExistsException } from "@/app/services/movies-reviews/errors/movie-review-title-already-exists.exception";
+import { ApiBody, ApiOperation } from "@nestjs/swagger";
 
 @Controller()
 export class CreateMovieReviewController {
@@ -12,6 +13,10 @@ export class CreateMovieReviewController {
 
   @Post('/movie-reviews')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Create a new movie review',
+    description: 'Create a new movie review with the given data',
+  })
   public async handle(@Body() requestDto: CreateMovieReviewControllerRequestBodyDto): Promise<any> {
     try {
       const response = await this.createMovieReviewService.execute({
