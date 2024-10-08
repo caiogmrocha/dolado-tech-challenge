@@ -68,7 +68,30 @@ describe('DeleteMovieReviewController (e2e)', () => {
     await app.close();
   });
 
-  it.todo('DELETE /movies-reviews/:id | should 204 when movie review is deleted');
-  it.todo('DELETE /movies-reviews/:id | should 404 when movie review does not exist');
-  it.todo('DELETE /movies-reviews/:id | should 422 when id is not a number');
+  it('DELETE /movies-reviews/:id | should return 204 when movie review is deleted', async () => {
+    const movieReviewData = {
+      title: 'The Matrix',
+      rating: 5,
+      releasedAt: '1999-03-31',
+      notes: 'This is a great movie!',
+    };
+
+    const movieReviewResponse = await request(app.getHttpServer())
+      .post('/movie-reviews')
+      .send(movieReviewData)
+      .expect(HttpStatus.CREATED);
+
+    const movieReviewId = movieReviewResponse.body.reviewId;
+
+    await request(app.getHttpServer())
+      .delete(`/movie-reviews/${movieReviewId}`)
+      .expect(res => {
+        console.log(res.body);
+        console.log(res.status);
+      })
+      .expect(HttpStatus.NO_CONTENT);
+  });
+
+  it.todo('DELETE /movies-reviews/:id | should return 404 when movie review does not exist');
+  it.todo('DELETE /movies-reviews/:id | should return 422 when id is not a number');
 });
