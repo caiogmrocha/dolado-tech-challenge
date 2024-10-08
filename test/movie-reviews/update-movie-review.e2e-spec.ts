@@ -97,5 +97,12 @@ describe('UpdateMovieReviewController (e2e)', () => {
       .expect(HttpStatus.NOT_FOUND);
   });
 
-  it.todo('PUT /movie-reviews/:id | should return 422 when payload is invalid');
+  it('PUT /movie-reviews/:id | should return 422 when payload is invalid', async () => {
+    await request(app.getHttpServer())
+      .put('/movie-reviews/1')
+      .send({
+        notes: '',
+      })
+      .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+  });
 });

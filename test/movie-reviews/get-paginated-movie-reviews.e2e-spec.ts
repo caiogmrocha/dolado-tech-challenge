@@ -10,7 +10,7 @@ import { DataSource } from 'typeorm';
 import { faker } from '@faker-js/faker';
 
 import { MovieReviewsModule } from '@/main/movie-reviews.module';
-import { GetDatabaseConnectionSingleton } from 'test/utils/create-database-connection';
+import { GetDatabaseConnectionSingleton } from '../utils/create-database-connection';
 
 describe('GetPaginatedMovieReviewsController (e2e)', () => {
   let app: INestApplication;
