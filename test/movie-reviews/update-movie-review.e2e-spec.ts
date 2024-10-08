@@ -65,7 +65,29 @@ describe('UpdateMovieReviewController (e2e)', () => {
     await app.close();
   });
 
-  it.todo('PUT /movie-reviews/:id | should return 204 when updating a movie review');
+  it('PUT /movie-reviews/:id | should return 204 when updating a movie review', async () => {
+    const movieReviewData = {
+      title: 'Inception',
+      rating: 5,
+      releasedAt: '2010-07-16',
+      notes: 'A movie about dreams',
+    };
+
+    const response = await request(app.getHttpServer())
+      .post('/movie-reviews')
+      .send(movieReviewData)
+      .expect(HttpStatus.CREATED);
+
+    const updatedMovieReviewData = {
+      notes: 'A movie about dreams',
+    };
+
+    await request(app.getHttpServer())
+      .put(`/movie-reviews/${response.body.reviewId}`)
+      .send(updatedMovieReviewData)
+      .expect(HttpStatus.NO_CONTENT);
+  });
+
   it.todo('PUT /movie-reviews/:id | should return 404 when movie review does not exist');
   it.todo('PUT /movie-reviews/:id | should return 422 when payload is invalid');
 });
