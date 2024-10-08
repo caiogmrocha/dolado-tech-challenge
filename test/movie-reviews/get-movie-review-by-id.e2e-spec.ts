@@ -91,5 +91,9 @@ describe('GetMovieReviewByIdController (e2e)', () => {
       .expect(HttpStatus.NOT_FOUND);
   });
 
-  it.todo('GET /movie-reviews/:id | should return 422 when movie review id is invalid');
+  it('GET /movie-reviews/:id | should return 422 when movie review id is invalid', async () => {
+    await request(app.getHttpServer())
+      .get('/movie-reviews/invalid-id')
+      .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+  });
 });
