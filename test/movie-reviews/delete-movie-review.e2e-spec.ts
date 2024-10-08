@@ -85,13 +85,16 @@ describe('DeleteMovieReviewController (e2e)', () => {
 
     await request(app.getHttpServer())
       .delete(`/movie-reviews/${movieReviewId}`)
-      .expect(res => {
-        console.log(res.body);
-        console.log(res.status);
-      })
       .expect(HttpStatus.NO_CONTENT);
   });
 
-  it.todo('DELETE /movies-reviews/:id | should return 404 when movie review does not exist');
+  it('DELETE /movies-reviews/:id | should return 404 when movie review does not exist', async () => {
+    const movieReviewId = 1;
+
+    await request(app.getHttpServer())
+      .delete(`/movie-reviews/${movieReviewId}`)
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
   it.todo('DELETE /movies-reviews/:id | should return 422 when id is not a number');
 });
