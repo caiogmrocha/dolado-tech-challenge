@@ -111,5 +111,28 @@ describe('CreateMovieReviewController (e2e)', () => {
     expect(response.status).toBe(HttpStatus.CONFLICT);
   });
 
-  it.todo('POST /movies-reviews | should return 422 when creating a movie review with invalid data');
+  it('POST /movies-reviews | should return 422 when creating a movie review with invalid data', async () => {
+    // Arrange
+    const movieReview = {
+      title: '', // invalid
+      rating: 5,
+      releasedAt: '1999-03-31',
+      notes: 'This is a great movie!',
+    };
+
+    // Act
+    const response = await request(app.getHttpServer())
+      .post('/movie-reviews')
+      .send({ ...movieReview });
+
+    // Assert
+    expect(response.status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+    expect(response.body).toEqual({
+      statusCode: 422,
+      message: [
+        'title should not be empty',
+      ],
+      error: 'Unprocessable Entity',
+    });
+  });
 });
