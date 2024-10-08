@@ -65,7 +65,26 @@ describe('GetMovieReviewByIdController (e2e)', () => {
     await app.close();
   });
 
-  it.todo('GET /movie-reviews/:id | should return 200 with movie review');
+  it('GET /movie-reviews/:id | should return 200 with movie review', async () => {
+    const movieReviewData = {
+      title: 'The Matrix',
+      rating: 5,
+      releasedAt: '1999-03-31',
+      notes: 'This is a great movie!',
+    };
+
+    const response = await request(app.getHttpServer())
+      .post('/movie-reviews')
+      .send(movieReviewData)
+      .expect(HttpStatus.CREATED);
+
+    const movieReviewId = response.body.reviewId;
+
+    await request(app.getHttpServer())
+      .get(`/movie-reviews/${movieReviewId}`)
+      .expect(HttpStatus.OK);
+  });
+
   it.todo('GET /movie-reviews/:id | should return 404 when movie review does not exist');
   it.todo('GET /movie-reviews/:id | should return 422 when movie review id is invalid');
 });
