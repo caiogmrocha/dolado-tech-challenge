@@ -1,0 +1,41 @@
+name: Deploy Dev
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Set environment variables
+        run: |
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+          echo "DB_HOST=dolado-mysql" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
+          echo "DB_DEFAULT=public" >> .env
+          echo "OMDB_API_KEY=${{ secrets.OMDB_API_KEY }}" >> .env
+
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build docker image
+        run: docker build -t caiogui/dolado-tech-challenge -f docker/dockerfiles/Dockerfile.api .
+
+      - name: Publish image to docker hub
+        run: docker push caiogui/dolado-tech-challenge:latest
+
+  deploy:
+    needs: build
+    runs-on: [aws-ec2]
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull caiogui/dolado-tech-challenge:latest
+
+      - name: Run docker compose
+        run: docker-compose up --build -d

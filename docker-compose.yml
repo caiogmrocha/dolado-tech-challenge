@@ -2,9 +2,7 @@ version: "3.0"
 
 services:
   dolado-api:
-    build:
-      context: .
-      dockerfile: ./docker/dockerfiles/Dockerfile.api
+    image: caiogui/dolado-tech-challenge:latest
     container_name: dolado-api
     restart: unless-stopped
     ports:
