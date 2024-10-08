@@ -68,7 +68,7 @@ describe('CreateMovieReviewController (e2e)', () => {
     await app.close();
   });
 
-  it('POST /movies-reviews | should return 201 when creating a movie review', async () => {
+  it('POST /movie-reviews | should return 201 when creating a movie review', async () => {
     // Arrange
     const movieReview = {
       title: 'The Matrix',
@@ -89,6 +89,27 @@ describe('CreateMovieReviewController (e2e)', () => {
     }));
   });
 
-  it.todo('POST /movies-reviews | should return 409 when creating a movie review that already exists');
+  it('POST /movie-reviews | should return 409 when creating a movie review that already exists', async () => {
+    // Arrange
+    const movieReview = {
+      title: 'The Matrix',
+      rating: 5,
+      releasedAt: '1999-03-31',
+      notes: 'This is a great movie!',
+    };
+
+    await request(app.getHttpServer())
+      .post('/movie-reviews')
+      .send(movieReview);
+
+    // Act
+    const response = await request(app.getHttpServer())
+      .post('/movie-reviews')
+      .send(movieReview);
+
+    // Assert
+    expect(response.status).toBe(HttpStatus.CONFLICT);
+  });
+
   it.todo('POST /movies-reviews | should return 422 when creating a movie review with invalid data');
 });

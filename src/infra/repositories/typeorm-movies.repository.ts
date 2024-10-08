@@ -17,7 +17,7 @@ export class TypeormMoviesRepository implements MoviesRepository {
   }
 
   public async getByTitle(title: string): Promise<Movie> {
-    return this.movieRepository.findOneBy({ title });
+    return this.movieRepository.findOne({ where: { title }, relations: ['reviews'] });
   }
 
   public async create(movie: Movie): Promise<{ id: number }> {
