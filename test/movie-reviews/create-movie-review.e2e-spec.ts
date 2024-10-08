@@ -3,10 +3,11 @@ import { ConfigModule } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import * as request from 'supertest';
 import { DataSource } from "typeorm";
 
 import { MovieReviewsModule } from "@/main/movie-reviews.module";
-import { createDatabaseConnection } from "test/utils/create-database-connection";
+import { createDatabaseConnection } from "../utils/create-database-connection";
 
 describe('CreateMovieReviewController (e2e)', () => {
   let app: INestApplication;
@@ -67,7 +68,27 @@ describe('CreateMovieReviewController (e2e)', () => {
     await app.close();
   });
 
-  it.todo('POST /movies-reviews | should return 201 when creating a movie review');
+  it('POST /movies-reviews | should return 201 when creating a movie review', async () => {
+    // Arrange
+    const movieReview = {
+      title: 'The Matrix',
+      rating: 5,
+      releasedAt: '1999-03-31',
+      notes: 'This is a great movie!',
+    };
+
+    // Act
+    const response = await request(app.getHttpServer())
+      .post('/movie-reviews')
+      .send(movieReview);
+
+    // Assert
+    expect(response.status).toBe(HttpStatus.CREATED);
+    expect(response.body).toEqual(expect.objectContaining({
+      reviewId: expect.any(Number),
+    }));
+  });
+
   it.todo('POST /movies-reviews | should return 409 when creating a movie review that already exists');
   it.todo('POST /movies-reviews | should return 422 when creating a movie review with invalid data');
 });
