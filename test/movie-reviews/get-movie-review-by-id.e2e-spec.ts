@@ -85,6 +85,11 @@ describe('GetMovieReviewByIdController (e2e)', () => {
       .expect(HttpStatus.OK);
   });
 
-  it.todo('GET /movie-reviews/:id | should return 404 when movie review does not exist');
+  it('GET /movie-reviews/:id | should return 404 when movie review does not exist', async () => {
+    await request(app.getHttpServer())
+      .get('/movie-reviews/1')
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
   it.todo('GET /movie-reviews/:id | should return 422 when movie review id is invalid');
 });
