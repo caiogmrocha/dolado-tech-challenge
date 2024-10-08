@@ -29,9 +29,6 @@ describe('DeleteMovieReviewController (e2e)', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          envFilePath: '.env.test',
-        }),
         TypeOrmModule.forRoot({
           type: 'mysql',
           host: process.env.DB_HOST,
