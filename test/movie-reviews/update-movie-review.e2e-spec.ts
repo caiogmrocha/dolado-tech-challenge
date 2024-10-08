@@ -88,6 +88,14 @@ describe('UpdateMovieReviewController (e2e)', () => {
       .expect(HttpStatus.NO_CONTENT);
   });
 
-  it.todo('PUT /movie-reviews/:id | should return 404 when movie review does not exist');
+  it('PUT /movie-reviews/:id | should return 404 when movie review does not exist', async () => {
+    await request(app.getHttpServer())
+      .put('/movie-reviews/1')
+      .send({
+        notes: 'A movie about dreams',
+      })
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
   it.todo('PUT /movie-reviews/:id | should return 422 when payload is invalid');
 });
