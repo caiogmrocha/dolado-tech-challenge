@@ -9,7 +9,7 @@ import { DataSource } from "typeorm";
 import { MovieReviewsModule } from "@/main/movie-reviews.module";
 import { GetDatabaseConnectionSingleton } from "../utils/create-database-connection";
 
-describe('CreateMovieReviewController (e2e)', () => {
+describe('DeleteMovieReviewController (e2e)', () => {
   let app: INestApplication;
   let datasource: DataSource;
   let database: string;
@@ -68,71 +68,7 @@ describe('CreateMovieReviewController (e2e)', () => {
     await app.close();
   });
 
-  it('POST /movie-reviews | should return 201 when creating a movie review', async () => {
-    // Arrange
-    const movieReview = {
-      title: 'The Matrix',
-      rating: 5,
-      releasedAt: '1999-03-31',
-      notes: 'This is a great movie!',
-    };
-
-    // Act
-    const response = await request(app.getHttpServer())
-      .post('/movie-reviews')
-      .send(movieReview);
-
-    // Assert
-    expect(response.status).toBe(HttpStatus.CREATED);
-    expect(response.body).toEqual(expect.objectContaining({
-      reviewId: expect.any(Number),
-    }));
-  });
-
-  it('POST /movie-reviews | should return 409 when creating a movie review that already exists', async () => {
-    // Arrange
-    const movieReview = {
-      title: 'The Matrix',
-      rating: 5,
-      releasedAt: '1999-03-31',
-      notes: 'This is a great movie!',
-    };
-
-    await request(app.getHttpServer())
-      .post('/movie-reviews')
-      .send(movieReview);
-
-    // Act
-    const response = await request(app.getHttpServer())
-      .post('/movie-reviews')
-      .send(movieReview);
-
-    // Assert
-    expect(response.status).toBe(HttpStatus.CONFLICT);
-  });
-
-  it('POST /movies-reviews | should return 422 when creating a movie review with invalid data', async () => {
-    // Arrange
-    const movieReview = {
-      title: '', // invalid
-      rating: 5,
-      releasedAt: '1999-03-31',
-      notes: 'This is a great movie!',
-    };
-
-    // Act
-    const response = await request(app.getHttpServer())
-      .post('/movie-reviews')
-      .send({ ...movieReview });
-
-    // Assert
-    expect(response.status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
-    expect(response.body).toEqual({
-      statusCode: 422,
-      message: [
-        'title should not be empty',
-      ],
-      error: 'Unprocessable Entity',
-    });
-  });
+  it.todo('DELETE /movies-reviews/:id | should 204 when movie review is deleted');
+  it.todo('DELETE /movies-reviews/:id | should 404 when movie review does not exist');
+  it.todo('DELETE /movies-reviews/:id | should 422 when id is not a number');
 });

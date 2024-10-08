@@ -10,7 +10,7 @@ import { DataSource } from 'typeorm';
 import { faker } from '@faker-js/faker';
 
 import { MovieReviewsModule } from '@/main/movie-reviews.module';
-import { createDatabaseConnection } from 'test/utils/create-database-connection';
+import { GetDatabaseConnectionSingleton } from 'test/utils/create-database-connection';
 
 describe('GetPaginatedMovieReviewsController (e2e)', () => {
   let app: INestApplication;
@@ -24,7 +24,7 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
 
     database = `test_${crypto.randomUUID()}`.replaceAll('-', '_').toLowerCase();
 
-    datasource = await createDatabaseConnection();
+    datasource = await GetDatabaseConnectionSingleton.getInstance();
   });
 
   beforeEach(async () => {

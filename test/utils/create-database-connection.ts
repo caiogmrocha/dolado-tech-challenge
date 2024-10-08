@@ -1,21 +1,27 @@
 import { DataSource } from 'typeorm';
 
-export async function createDatabaseConnection() {
-  const datasource = new DataSource({
-    type: 'mysql',
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: 'public',
-    ssl: false,
-    entities: [
-      __dirname + '/../../src/domain/entities/*.entity.{ts,js}',
-    ],
-    synchronize: true,
-  });
+export class GetDatabaseConnectionSingleton {
+  private static instance: DataSource;
 
-  await datasource.initialize();
+  public static async getInstance(): Promise<DataSource> {
+    if (!GetDatabaseConnectionSingleton.instance) {
+      GetDatabaseConnectionSingleton.instance = new DataSource({
+        type: 'mysql',
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: 'public',
+        ssl: false,
+        entities: [
+          __dirname + '/../../src/domain/entities/*.entity.{ts,js}',
+        ],
+        synchronize: true,
+      });
+    }
 
-  return datasource;
+    await GetDatabaseConnectionSingleton.instance.initialize();
+
+    return GetDatabaseConnectionSingleton.instance;
+  }
 }
