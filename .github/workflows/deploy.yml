@@ -35,7 +35,7 @@ jobs:
     runs-on: [aws-ec2]
     steps:
       - name: Pull image from docker hub
-        run: docker pull caiogui/dolado-tech-challenge:latest
+        run: sudo docker pull caiogui/dolado-tech-challenge:latest
 
       - name: Run docker compose
-        run: docker-compose up --build -d
+        run: sudo docker-compose up --build -d
