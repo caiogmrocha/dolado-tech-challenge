@@ -10,6 +10,7 @@ import { DataSource } from 'typeorm';
 import { faker } from '@faker-js/faker';
 
 import { MovieReviewsModule } from '@/main/movie-reviews.module';
+import { createDatabaseConnection } from 'test/utils/create-database-connection';
 
 describe('GetPaginatedMovieReviewsController (e2e)', () => {
   let app: INestApplication;
@@ -23,23 +24,7 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
 
     database = `test_${crypto.randomUUID()}`.replaceAll('-', '_').toLowerCase();
 
-    if (!datasource) {
-      datasource = new DataSource({
-        type: 'mysql',
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        username: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: 'public',
-        ssl: false,
-        entities: [
-          __dirname + '/../../src/domain/entities/*.entity.{ts,js}',
-        ],
-        synchronize: true,
-      });
-
-      await datasource.initialize();
-    }
+    datasource = await createDatabaseConnection();
   });
 
   beforeEach(async () => {
@@ -47,9 +32,6 @@ describe('GetPaginatedMovieReviewsController (e2e)', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          envFilePath: '.env.test',
-        }),
         TypeOrmModule.forRoot({
           type: 'mysql',
           host: process.env.DB_HOST,
