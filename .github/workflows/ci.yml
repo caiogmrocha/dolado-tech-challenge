@@ -3,21 +3,63 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  build:
-
+  run-unit-tests:
+    name: Run unit tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: '20.14'
 
       - name: Install dependencies
-        run: npm i
+        run: npm install
 
       - name: Run unit tests
         run: npm run test
+
+  run-e2e-tests:
+    name: Run e2e tests
+    runs-on: ubuntu-latest
+    env:
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASS: password
+      DB_DEFAULT: public
+      OMDB_API_KEY: aa9290ba
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Shutdown Ubuntu MySQL
+        run: sudo service mysql stop
+
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql root password: $DATABASE_PASS
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set .env.test variables
+        run: |
+          echo DB_HOST=$DB_HOST >> .env.test
+          echo DB_PORT=$DB_PORT >> .env.test
+          echo DB_USER=$DB_USER >> .env.test
+          echo DB_PASS=$DB_PASS >> .env.test
+          echo DB_DEFAULT=$DB_DEFAULT >> .env.test
+          echo OMDB_API_KEY=$OMDB_API_KEY >> .env.test
+
+      - name: Run e2e tests
+        run: npm run test:e2e
