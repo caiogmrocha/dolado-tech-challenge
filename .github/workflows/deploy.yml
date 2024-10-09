@@ -66,7 +66,7 @@ jobs:
           --name dolado-api \
           --network dolado-api \
           --restart unless-stopped \
-          -p 3000:3000 \
+          -p 80:3000 \
           -v $(pwd):/app \
           --link dolado-mysql:mysql \
           caiogui/dolado-tech-challenge:latest
