@@ -24,3 +24,4 @@ services:
       - ./docker/volumes/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=${DB_DEFAULT}

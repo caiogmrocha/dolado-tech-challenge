@@ -11,7 +11,7 @@ export class GetDatabaseConnectionSingleton {
         port: process.env.DB_PORT,
         username: process.env.DB_USER,
         password: process.env.DB_PASS,
-        database: 'public',
+        database: process.env.DB_DEFAULT,
         ssl: false,
         entities: [
           __dirname + '/../../src/domain/entities/*.entity.{ts,js}',
