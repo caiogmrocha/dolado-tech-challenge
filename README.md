@@ -37,7 +37,7 @@ A estrutura do projeto foi organizada de forma a seguir os princípios da Clean 
 
 ## Execução da aplicação
 
-Assumindo que o docker e o npm, na versão 20.*, estejam instalados, siga os passos abaixo:
+Assumindo que o Docker e o Node.js, na versão 20.*, estejam instalados, siga os passos abaixo:
 
 ```bash
 $ git clone git@github.com:caiogmrocha/dolado-tech-challenge.git
