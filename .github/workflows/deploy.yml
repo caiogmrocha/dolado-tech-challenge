@@ -13,7 +13,6 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
           echo "DB_HOST=dolado-mysql" >> .env
           echo "DB_PORT=3306" >> .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
@@ -32,10 +31,17 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [aws-ec2]
+    runs-on: aws-ec2
     steps:
-      - name: Pull image from docker hub
+      - name: Install git
+        run: sudo apt-get install git -y
+
+      - name: Checkout repository
+        run: git clone git@github.com:caiogmrocha/dolado-tech-challenge.git
+
+      - name: Pull docker image from docker hub
         run: sudo docker pull caiogui/dolado-tech-challenge:latest
 
       - name: Run docker compose
+        working-directory: dolado-tech-challenge
         run: sudo docker compose up --build -d
