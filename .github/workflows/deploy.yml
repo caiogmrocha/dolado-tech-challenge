@@ -35,8 +35,8 @@ jobs:
     steps:
       - name: Create network if it does not exist
         run: |
-          if ! docker network inspect dolado-api &> /dev/null; then
-            docker network create dolado-api
+          if ! sudo docker network inspect dolado-api &> /dev/null; then
+            sudo docker network create dolado-api
           fi
 
       - name: Pull image from docker hub
