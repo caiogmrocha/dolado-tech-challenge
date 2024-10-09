@@ -1,3 +1,5 @@
+import * as crypto from 'crypto';
+
 import { HttpStatus, INestApplication, ValidationPipe } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
@@ -35,6 +37,7 @@ describe('CreateMovieReviewController (e2e)', () => {
           port: process.env.DB_PORT,
           username: process.env.DB_USER,
           password: process.env.DB_PASS,
+
           database: database,
           ssl: false,
           entities: [
@@ -61,7 +64,6 @@ describe('CreateMovieReviewController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await datasource.destroy();
     await app.close();
   });
 

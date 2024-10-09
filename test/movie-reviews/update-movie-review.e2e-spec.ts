@@ -1,3 +1,5 @@
+import * as crypto from 'crypto';
+
 import { HttpStatus, INestApplication, ValidationPipe } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
