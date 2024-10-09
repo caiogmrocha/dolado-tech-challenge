@@ -33,16 +33,30 @@ jobs:
     needs: build
     runs-on: [aws-ec2]
     steps:
+      - name: Create network if it does not exist
+        run: |
+          if ! docker network inspect dolado-api &> /dev/null; then
+            docker network create dolado-api
+          fi
+
       - name: Pull image from docker hub
         run: sudo docker pull caiogui/dolado-tech-challenge:latest
 
       - name: Pull mysql image from docker hub
         run: sudo docker pull mysql:8.4
 
+      - name: Stop and remove containers
+        run: |
+          sudo docker stop dolado-api || true
+          sudo docker rm dolado-api || true
+          sudo docker stop dolado-mysql || true
+          sudo docker rm dolado-mysql || true
+
       - name: Run mysql container
         run: |
           sudo docker run -d \
           --name dolado-mysql \
+          --network dolado-api \
           -e MYSQL_ROOT_PASSWORD=password \
           -p 3306:3306 \
           -v $(pwd)/docker/volumes/mysql:/var/lib/mysql \
@@ -53,6 +67,7 @@ jobs:
         run: |
           sudo docker run -d \
           --name dolado-api \
+          --network dolado-api \
           --restart unless-stopped \
           -p 3000:3000 \
           -v $(pwd):/app \
