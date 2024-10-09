@@ -36,22 +36,27 @@ jobs:
       - name: Pull image from docker hub
         run: sudo docker pull caiogui/dolado-tech-challenge:latest
 
+      - name: Pull mysql image from docker hub
+        run: sudo docker pull mysql:8.4
+
       - name: Run mysql container
-        run: sudo docker run -d \
-            --name dolado-mysql \
-            -e MYSQL_ROOT_PASSWORD=password \
-            -p 3306:3306 \
-            -v $(pwd)/docker/volumes/mysql:/var/lib/mysql \
-            mysql:8.4 \
-            --mysql-native-password=ON
+        run: |
+          sudo docker run -d \
+          --name dolado-mysql \
+          -e MYSQL_ROOT_PASSWORD=password \
+          -p 3306:3306 \
+          -v $(pwd)/docker/volumes/mysql:/var/lib/mysql \
+          mysql:8.4 \
+          --mysql-native-password=ON
 
       - name: Run api container
-        run: sudo docker run -d \
-            --name dolado-api \
-            --restart unless-stopped \
-            -p 3000:3000 \
-            -p 9229:9229 \
-            -v $(pwd):/app \
-            --link dolado-mysql:mysql \
-            caiogui/dolado-tech-challenge:latest
+        run: |
+          sudo docker run -d \
+          --name dolado-api \
+          --restart unless-stopped \
+          -p 3000:3000 \
+          -p 9229:9229 \
+          -v $(pwd):/app \
+          --link dolado-mysql:mysql \
+          caiogui/dolado-tech-challenge:latest
 
