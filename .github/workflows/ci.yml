@@ -44,7 +44,7 @@ jobs:
       - name: Setup MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
-          mysql root password: $DATABASE_PASS
+          mysql root password: $DB_PASS
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
