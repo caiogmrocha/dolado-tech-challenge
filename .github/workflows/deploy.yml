@@ -35,26 +35,26 @@ jobs:
     steps:
       - name: Create network if it does not exist
         run: |
-          if ! sudo docker network inspect dolado-api &> /dev/null; then
-            sudo docker network create dolado-api
+          if ! docker network inspect dolado-api &> /dev/null; then
+            docker network create dolado-api
           fi
 
       - name: Pull image from docker hub
-        run: sudo docker pull caiogui/dolado-tech-challenge:latest
+        run: docker pull caiogui/dolado-tech-challenge:latest
 
       - name: Pull mysql image from docker hub
-        run: sudo docker pull mysql:8.4
+        run: docker pull mysql:8.4
 
       - name: Stop and remove containers
         run: |
-          sudo docker stop dolado-api || true
-          sudo docker rm dolado-api || true
-          sudo docker stop dolado-mysql || true
-          sudo docker rm dolado-mysql || true
+          docker stop dolado-api || true
+          docker rm dolado-api || true
+          docker stop dolado-mysql || true
+          docker rm dolado-mysql || true
 
       - name: Run mysql container
         run: |
-          sudo docker run -d \
+          docker run -d \
           --name dolado-mysql \
           --network dolado-api \
           -e MYSQL_ROOT_PASSWORD=password \
@@ -65,7 +65,7 @@ jobs:
 
       - name: Run api container
         run: |
-          sudo docker run -d \
+          docker run -d \
           --name dolado-api \
           --network dolado-api \
           --restart unless-stopped \
