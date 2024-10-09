@@ -47,10 +47,7 @@ jobs:
 
       - name: Stop and remove containers
         run: |
-          docker stop dolado-api || true
-          docker rm -f dolado-api || true
-          docker stop dolado-mysql || true
-          docker rm -f dolado-mysql || true
+          docker image prune -f
 
       - name: Run mysql container
         run: |
